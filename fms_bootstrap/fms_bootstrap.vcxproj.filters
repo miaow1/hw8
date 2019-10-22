@@ -18,9 +18,18 @@
     <ClCompile Include="fms_bootstrap.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fms_pwflat_vector.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fms_bootstrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_pwflat_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_pwflat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
