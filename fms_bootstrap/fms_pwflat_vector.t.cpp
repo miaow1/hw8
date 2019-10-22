@@ -69,44 +69,53 @@ inline int test_fms_pwflat()
 		assert(fabs(.1 + .2 + .3 - tf.integral(u)) < 1e-10);
 		//		assert (.1 + .2 + .3 != .6); 
 	}
-#if 0
 	{ // discount
 		double u_[] = { -.5, 0, .5, 1, 1.5, 2, 2.5, 3, 3.5 };
 		double f_[] = { 0, 0, .05, .1, .2, .3, .45, .6, .7 };
+		auto tf = forward_vector<double,double>(t.size(), t.data(), f.data());
 		for (int i = 0; i < 9; i++) {
 			if (i == 0 || i == 8) {
-				assert(isnan(discount(u_[i], t.size(), t.data(), f.data())));
+				assert(isnan(tf.discount(u_[i])));
 			}
 			else {
-				assert(fabs(exp(-f_[i]) - discount(u_[i], t.size(), t.data(), f.data())) < 1e-10);
+				assert(fabs(exp(-f_[i]) - tf.discount(u_[i])) < 1e-10);
 			}
 		}
 
 		for (int i = 0; i < 9; i++) {
 			if (i == 0) {
-				assert(isnan(discount(u_[i], t.size(), t.data(), f.data(), 0.2)));
+				tf.extrapolate(0.2);
+				assert(isnan(tf.discount(u_[i])));
 			}
 			else {
-				assert(fabs(exp(-f_[i]) - discount(u_[i], t.size(), t.data(), f.data(), 0.2)) < 1e-10);
+				assert(fabs(exp(-f_[i]) - tf.discount(u_[i])) < 1e-10);
 			}
 		}
 	}
 	{ // spot
 		double u_[] = { -.5, 0, .5, 1, 1.5, 2, 2.5, 3, 3.5 };
 		double f_[] = { .1, .1, .1, .1, .2 / 1.5, .3 / 2, .45 / 2.5, .6 / 3, .7 / 3.5 };
+		auto tf = forward_vector(t.size(), t.data(), f.data());
 		for (int i = 0; i < 9; i++) {
-			if (i == 8) {
-				assert(isnan(spot(u_[i], t.size(), t.data(), f.data())));
+			if (i == 0 || i == 8) {
+				assert(isnan(tf.spot(u_[i])));
 			}
 			else {
-				assert(fabs(f_[i] - spot(u_[i], t.size(), t.data(), f.data())) < 1e-10);
+				assert(fabs(f_[i] - tf.spot(u_[i])) < 1e-10);
 			}
 		}
 
 		for (int i = 0; i < 9; i++) {
-			assert(fabs(f_[i] - spot(u_[i], t.size(), t.data(), f.data(), 0.2)) < 1e-10);
+			tf.extrapolate(0.2);
+			if (i == 0) {
+				assert(isnan(tf.spot(u_[i])));
+			}
+			else {
+				assert(fabs(f_[i] - tf.spot(u_[i])) < 1e-10);
+			}
 		}
 	}
+#if 0
 	{ // present_value
 		double u_[] = { 0, 1, 2, 3, 4 };
 		double d_[] = { 0,

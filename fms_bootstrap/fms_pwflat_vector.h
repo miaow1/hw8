@@ -74,18 +74,14 @@ namespace fms::pwflat {
 			T t_{ 0 };
 			F I{ 0 };
 			for (const auto& [ti, fi] : tf) {
-				if (ti == tf.back().first) {
-					I += _f * (t - ti);
-
-					break;
-				}
-				else if (ti > t) {
-					I += fi * (t - t_);
-
-					break;
+				if (ti > t) {
+					return I += fi * (t - t_);
 				}
 				I += fi * (ti - t_);
 				t_ = ti;
+			}
+			if (t > t_) {
+				I += _f * (t - t_);
 			}
 
 			return I;
