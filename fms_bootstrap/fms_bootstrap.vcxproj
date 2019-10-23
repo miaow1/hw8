@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="fms_bootstrap.t.cpp" />
+    <ClCompile Include="fms_pwflat_value.t.cpp" />
     <ClCompile Include="fms_pwflat_vector.t.cpp" />
   </ItemGroup>
   <ItemGroup>

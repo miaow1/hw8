@@ -21,6 +21,9 @@
     <ClCompile Include="fms_pwflat_vector.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fms_pwflat_value.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fms_bootstrap.h">

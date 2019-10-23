@@ -6,10 +6,13 @@
 #include <utility>
 
 /*
+	A piecewise flat curve is determined by points (t[i], f[i]), 0 <= i < n, and an extrapolation value _f.
+
 	f(t) = f[i] if t[i-1] < t <= t[i];
 		 = _f if t > t[n-1];
-	and undefined if t < 0.
-	Note f(t[i]) = f[i].
+		 = undefined if t < 0.
+	
+	Note f is continuous from the left and f(t[i]) = f[i].
 
 	|                                   _f
 	|        f[1]             f[n-1] o--------
@@ -19,8 +22,52 @@
 	0-----t[0]--- ... ---t[n-2]---t[n-1]
 */
 
+// Type of *S
+template<class S>
+using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
+
+template<class... S>
+using common_value_type = std::common_type_t<value_type<S>...>;
+
 namespace fms::pwflat {
 
+	// Shorthand for Not a Number.
+	template<class X>
+	constexpr X NaN = std::numeric_limits<X>::quiet_NaN();
+
+	// Value of the pwflat forward curve at u given sequences for points determining the curve.
+	template<class T, class F>
+	inline value_type<F> value(const value_type<T>& u, T t, F f, const value_type<F>& _f = NaN<value_type<F>>)
+	{
+		if (u < 0) {
+			return NaN<value_type<F>>;
+		}
+
+		while (t and *t <= u) {
+			++t;
+			++f;
+		}
+
+		return f ? *f : _f;
+	}
+	/*
+	// Integral of the pwflat forward from 0 to u given sequences for points determining the curve.
+	template<class T, class F>
+	inline auto integral(T u, T t, F f, const decltype(*f)& _f = NaN<decltype(*f)>)
+	{
+		common_value_type<T,F> I = 0;
+		value_type<T> t_ = 0;
+
+		while (t and *t < u) {
+			I += (*f) * (*t - t_);
+			++t;
+			++f;
+			t_ = *t;
+		}
+
+		return I + (f ? *f : _f)*(u - t_);
+	}
+	*/
 	template<class T, class F>
 	struct forward_interface {
 		virtual ~forward_interface()
