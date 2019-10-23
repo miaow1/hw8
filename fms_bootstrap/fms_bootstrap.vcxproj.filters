@@ -18,10 +18,13 @@
     <ClCompile Include="fms_bootstrap.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fms_pwflat_vector.t.cpp">
+    <ClCompile Include="fms_pwflat_value.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fms_pwflat_value.t.cpp">
+    <ClCompile Include="fms_pwflat_integral.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_pwflat.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,10 +32,10 @@
     <ClInclude Include="fms_bootstrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_pwflat_vector.h">
+    <ClInclude Include="fms_pwflat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_pwflat.h">
+    <ClInclude Include="fms_sequence_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

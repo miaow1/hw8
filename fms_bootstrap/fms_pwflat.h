@@ -37,93 +37,93 @@ namespace fms::pwflat {
 
 	// Value of the pwflat forward curve at u given sequences for points determining the curve.
 	template<class T, class F>
-	inline value_type<F> value(const value_type<T>& u, T t, F f, const value_type<F>& _f = NaN<value_type<F>>)
+	inline auto value(const value_type<T>& u, T t, F f, const value_type<F>& _f = NaN<value_type<F>>)
 	{
 		if (u < 0) {
 			return NaN<value_type<F>>;
 		}
 
-		while (t and *t <= u) {
+		while (t and *t < u) {
 			++t;
 			++f;
 		}
 
 		return f ? *f : _f;
 	}
-	/*
+
 	// Integral of the pwflat forward from 0 to u given sequences for points determining the curve.
 	template<class T, class F>
-	inline auto integral(T u, T t, F f, const decltype(*f)& _f = NaN<decltype(*f)>)
+	inline auto integral(const value_type<T>& u, T t, F f, const decltype(*f)& _f = NaN<decltype(*f)>)
 	{
 		common_value_type<T,F> I = 0;
 		value_type<T> t_ = 0;
 
+		if (u < 0) {
+			return NaN<value_type<F>>;
+		}
+
 		while (t and *t < u) {
 			I += (*f) * (*t - t_);
+			t_ = *t;
 			++t;
 			++f;
-			t_ = *t;
 		}
 
 		return I + (f ? *f : _f)*(u - t_);
 	}
-	*/
+	
 	template<class T, class F>
-	struct forward_interface {
-		virtual ~forward_interface()
+	class forward {
+		using _T = value_type<T>;
+		using _F = value_type<F>;
+		T t;
+		F f;
+		_F _f;
+	public:
+		forward(T t, F f, const _F _f = NaN<_F>)
+			: t(t), f(f), _f(_f)
 		{ }
 
-		// First point on curve.
-		std::pair<T, F> front() const
+		// Extrapolate past end of curve; f(t) = _f if t > t[n-1].
+		forward& extrapolate(const _F& f_ = NaN<_F>) // not const
 		{
-			return front_();
-		}
-		// Last point on curve.
-		std::pair<T, F> back() const
-		{
-			return back_();
-		}
-		// Extrapolate past end of curve; f(t) = _f if t > t_{n-1}.
-		forward_interface& extrapolate(const F& _f) // not const
-		{
-			return extrapolate_(_f);
+			_f = f_;
+
+			return *this;
 		}
 
-		// Value of forward at t.
-		F forward(const T& t) const
+		F value(const T& u) const
 		{
-			return forward_(t);
+			return fms::pwflat::value(u, t, f, _f);
 		}
-		F operator()(const T& t) const
+		F operator()(const T& u) const
 		{
-			return forward(t);
+			return value(u);
 		}
 
 		// Integral from 0 to t of forward.
-		F integral(const T& t) const
+		F integral(const T& u) const
 		{
-			return integral_(t);
+			return fms::pwflat::integral(u, t, f, _f);
 		}
 
 		// D(t) = exp(-int_0^t f(s) ds).
-		F discount(const T& t) const
+		F discount(const T& u) const
 		{
-			return exp(-integral(t));
+			return exp(-integral(u));
 		}
 
-		// D(t) = exp(-t r(t)). Note f(t) = r(t) on [0, t0).
-		F spot(const T& t) const
+		// D(t) = exp(-t r(t)). Note f(t) = r(t) on [0, t0].
+		F spot(const T& u) const
 		{
-			const auto& [f0, t0] = front();
+			if (!t) {
+				return _f;
+			}
 
-			return t < t0 ? forward(t) : - log(discount(t)) / t;
+			_T t0 = *t;
+
+			return u <= t0 ? value(u) : - log(discount(u)) / u;
 		}
-	private:
-		virtual std::pair<F, T> front_() const = 0;
-		virtual std::pair<F, T> back_() const = 0;
-		virtual forward_interface& extrapolate_(const F&) = 0;
-		virtual F forward_(const T&) const = 0;
-		virtual std::common_type_t<F,T> integral_(const T&) const = 0;
 	};
 
 }
