@@ -92,29 +92,29 @@ namespace fms::pwflat {
 			return *this;
 		}
 
-		F value(const T& u) const
+		_F value(const _T& u) const
 		{
 			return fms::pwflat::value(u, t, f, _f);
 		}
-		F operator()(const T& u) const
+		_F operator()(const _T& u) const
 		{
 			return value(u);
 		}
 
 		// Integral from 0 to t of forward.
-		F integral(const T& u) const
+		_F integral(const _T& u) const
 		{
 			return fms::pwflat::integral(u, t, f, _f);
 		}
 
 		// D(t) = exp(-int_0^t f(s) ds).
-		F discount(const T& u) const
+		_F discount(const _T& u) const
 		{
 			return exp(-integral(u));
 		}
 
 		// D(t) = exp(-t r(t)). Note f(t) = r(t) on [0, t0].
-		F spot(const T& u) const
+		_F spot(const _T& u) const
 		{
 			if (!t) {
 				return _f;

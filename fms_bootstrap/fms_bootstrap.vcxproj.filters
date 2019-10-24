@@ -27,6 +27,9 @@
     <ClCompile Include="fms_pwflat.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fms_instrument.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fms_bootstrap.h">
@@ -35,7 +38,7 @@
     <ClInclude Include="fms_pwflat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_sequence_list.h">
+    <ClInclude Include="fms_instrument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
