@@ -8,8 +8,8 @@
 
 namespace fms::bootstrap {
 
-	template<class X>
-	constexpr X NaN = std::numeric_limits<X>::quiet_NaN();
+	//template<class X>
+	//constexpr X NaN = std::numeric_limits<X>::quiet_NaN();
 
 	// Extend curve having one cash flow past the end of the curve.
 	// p = sum_{u_j < u} c_j D_j + cu Du exp(-f du) = pv + cu Du exp(-f du); 
@@ -29,22 +29,33 @@ namespace fms::bootstrap {
 
 	// Extrapolate forward curve for given a price and instrument.
 	// p = sum_{u_j <= t} c_j D_j + sum_{u_k > t} c_k D(t) exp(-f (u_k - t)) = pv_ + _pv
-	template<class P, class T, class C>
-	inline std::pair<T, C> extend(pwflat::forward<T,C>& f, const T& t, const P& p, T u, C c)
+	template</*class P,*/ class T, class C>
+//!!	inline std::pair<T, C> extend(pwflat::forward<T,C>& f, const T& t, const P& p, T u, C c)
+	inline std::pair<double, double> extend(pwflat::forward<T,C>& f, const double& t, const double& p, T u, C c)
 	{
+		typedef double P;
         using fms::sequence::apply;
         using fms::sequence::filter;
         using fms::sequence::sum;
+
+		double x;
+		if (p == p)
+			x = 1;
 
 		// set extrapolated value to NaN
 		f.extrapolate();
 
 		// discount function
 		auto D = [&f](const T& t) { return f.discount(t); };
-
 		// Cash flow times up to t.
-		auto u_ = filter([t](auto _u) { return _u <= t; }, u);		
-		auto pv_ = sum(c * apply(D, u_));
+		auto u_ = filter([t](auto _u) { return _u <= t; }, u);	
+		auto Du = apply(D, u_);
+		auto prod = c * Du;
+		auto p0 = prod;
+		p0 = p0;
+		auto pv_ = sum(c);
+		pv_ = pv_;
+#if 0
 
 		auto n_ = length(u_);
 		auto _u = skip(n_, u);
@@ -52,7 +63,7 @@ namespace fms::bootstrap {
 		auto _n = length(_u); // remaining cash flows
 
 		if (_n == 0) {
-			return std::pair(NaN<decltype(*u)>, NaN<decltype(*c)>);
+			return std::pair(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
 		}
 		if (_n == 1) {
 			return std::pair(*_u, extend1(p, pv_, *_c, D(t), *_u - t));
@@ -71,16 +82,17 @@ namespace fms::bootstrap {
 		C f0 = 0.01, f1 = 0.02; // initial guesses for secant
 		auto _pv0 = _pv(f0);
 		auto _pv1 = _pv(f1);
-		/*
-		// Find root using secant method.
-		while (fabs(-p + pv_ + _pv(f)) >= .00001) {
-			m = a / b;
-			f_ = f + m * (f - f_);
-			std::swap(f, f_);
-		}
-		*/
 		
-		return std::pair<decltype(*u),decltype(*c)>(0, 0);
+		// Find root using secant method.
+		while (fabs(-p + pv_ + _pv1) >= 1e-8) {
+			auto f2 = (f0 * _pv1 - f1*_pv0) / (_pv1 - _pv0);
+			_pv0 = _pv1;
+			_pv1 = _pv(f2);
+			f0 = f1;
+			f1 = f2;
+		}
+#endif	
+		return std::pair<double,double>(0, 0);
 
 	}
 
