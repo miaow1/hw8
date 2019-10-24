@@ -1,5 +1,6 @@
 // fms_bootstrap.t.cpp - Test bootstrap algorithm.
 #include <cassert>
+#include "../fms_sequence/fms_sequence.h"
 #include "fms_bootstrap.h"
 #include "fms_pwflat.h"
 

@@ -4,6 +4,7 @@
 #include <limits>
 #include <type_traits>
 #include <utility>
+#include "../fms_sequence/fms_sequence_traits.h"
 
 /*
 	A piecewise flat curve is determined by points (t[i], f[i]), 0 <= i < n, and an extrapolation value _f.
@@ -30,13 +31,11 @@ using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
 template<class... S>
 using common_value_type = std::common_type_t<value_type<S>...>;
 */
+
+using fms::sequence::value_type;
+using fms::sequence::common_value_type;
+
 namespace fms::pwflat {
-
-	template<class S>
-	using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
-
-	template<class... S>
-	using common_value_type = std::common_type_t<value_type<S>...>;
 
 	// Shorthand for Not a Number.
 	template<class X>
@@ -48,7 +47,7 @@ namespace fms::pwflat {
 	inline double value(const double& u, T t, F f, const double _f = NaN<double>)
 	{
 		if (u < 0) {
-			return NaN<value_type<F>>;
+			return NaN<double>; //!!! value_type<F >> ;
 		}
 
 		while (t and *t < u) {
@@ -64,11 +63,13 @@ namespace fms::pwflat {
 //	inline auto integral(const value_type<T>& u, T t, F f, const decltype(*f)& _f = NaN<decltype(*f)>)
 	inline double integral(const double& u, T t, F f, const double& _f = NaN<double>)
 	{
-		common_value_type<T,F> I = 0;
-		value_type<T> t_ = 0;
+		//common_value_type<T,F> I = 0;
+		double I = 0;
+		//!!!value_type<T> t_ = 0;
+		double t_ = 0;
 
 		if (u < 0) {
-			return NaN<value_type<F>>;
+			return NaN<double>; //!!! value_type<F >> ;
 		}
 
 		while (t and *t < u) {
@@ -83,16 +84,21 @@ namespace fms::pwflat {
 	
 	template<class T, class F>
 	class forward {
-		using _T = value_type<T>;
-		using _F = value_type<F>;
+		//using _T = value_type<T>;
+		using _T = double;
+		//using _F = value_type<F>;
+		using _F = double;
 		T t;
 		F f;
 		_F _f;
 	public:
+		/*
 		forward(const _F& _f = NaN<_F>)
 			: _f(_f)
 		{ }
-		forward(T t, F f, const _F& _f = NaN<_F>)
+		*/
+//		forward(T t, F f, const _F& _f = NaN<_F>)
+		forward(T t, F f, const double& _f = NaN<double>)
 			: t(t), f(f), _f(_f)
 		{ }
 

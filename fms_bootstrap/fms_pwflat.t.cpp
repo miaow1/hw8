@@ -6,7 +6,9 @@
 using namespace fms::pwflat;
 using namespace fms::sequence;
 
-list<double> t({ 1, 2, 3 }), f({ .1, .2, .3 });
+using fms::sequence::list;
+
+fms::sequence::list<double> t({ 1, 2, 3 }), f({ .1, .2, .3 });
 
 int test_pwflat_value()
 {
