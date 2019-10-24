@@ -4,6 +4,7 @@
 #include <limits>
 #include <utility>
 #include "../fms_sequence/fms_sequence.h"
+#include "fms_pwflat.h"
 
 namespace fms::bootstrap {
 
@@ -27,14 +28,19 @@ namespace fms::bootstrap {
 	}
 
 	// Extend curve for any price and instrument.
-	// p = sum_{u_j <= t} c_j D_j + sum_{u_k > t} c_k D(t) exp(-f (u_k - t)) = pv + _pv
-	template<class F, class P, class C, class T>
-	inline std::pair<T, C> extend(const F& D, const T& t, const P& p, T u, C c)
+	// p = sum_{u_j <= t} c_j D_j + sum_{u_k > t} c_k D(t) exp(-f (u_k - t)) = pv_ + _pv
+	template<class P, class T, class C>
+	inline std::pair<T, C> extend(const pwflat::forward<T,C>& f, const T& t, const P& p, T u, C c)
 	{
+        using fms::sequence::apply;
+        using fms::sequence::filter;
+        using fms::sequence::sum;
+
 		auto u_ = filter([t](auto _u) { return _u <= t; }, u);
-		auto _u = filter([t](auto _u) { return _u > t; }, u);
+		auto _u = filter([t](auto _u) { return _u >  t; }, u);
 		
-		auto pv = sum(c * apply(D, u_));
+        auto D = [&f](T t) { return f.discount(t); };
+		auto pv_ = sum(c * apply(D, u_));
 
 		// Number of cash flows before t.
 		auto n_ = length(u_);
@@ -49,9 +55,9 @@ namespace fms::bootstrap {
 			return std::pair(NaN<decltype(*u)>, NaN<decltype(*c)>);
 		}
 		if (_n == 1) {
-			return std::pair(*_u, extend1(p, pv, *_c, Dt, *_u - t));
+			return std::pair(*_u, extend1(p, pv_, *_c, Dt, *_u - t));
 		}
-		if (_n == 2 and (p - pv) + 1 == 1) {
+		if (_n == 2 and (p - pv_) + 1 == 1) {
 			auto u0 = *_u;
 			auto u1 = *++_u;
 			auto c0 = *_c;
@@ -60,13 +66,14 @@ namespace fms::bootstrap {
 			return std::pair(u1, extend2(c0, u0, c1, u1));
 		}
 		/*
-		C f = 0.01;
+		C _f = 0.01;
 		// f will change on each call
+        f.extrapolate(_f);
 		auto Du = [Dt,t,&f](auto u) { return Dt * exp(-f*(u - t)); };
 		auto _pv = [](C f) { return sum(_c, apply(_D, _u)); };
 
 		// Find root using secant method.
-		while (fabs(-p + pv + _pv(f)) >= .00001) {
+		while (fabs(-p + pv_ + _pv(f)) >= .00001) {
 			m = a / b;
 			f_ = f + m * (f - f_);
 			std::swap(f, f_);

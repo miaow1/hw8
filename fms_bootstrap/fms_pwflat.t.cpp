@@ -29,9 +29,9 @@ int test_pwflat_integral()
 {
 	assert(isnan(integral(-1, t, f)));
 	assert(0 == integral(0, t, f));
-	assert(.1*0.5 == integral(0.5, t, f));
+	assert(.1 * 0.5 == integral(0.5, t, f));
 	assert(.1*1 == integral(1, t, f));
-	assert(.1 * 1 + .2*0.5 == integral(1.5, t, f));
+	assert(.1 * 1 + .2 * 0.5 == integral(1.5, t, f));
 	assert(.1 * 1 + .2 * 1 == integral(2, t, f));
 	assert(.1 * 1 + .2 * 1 + .3*1 == integral(3, t, f));
 	assert(isnan(integral(3.00001, t, f)));

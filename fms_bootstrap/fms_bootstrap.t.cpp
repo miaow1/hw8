@@ -2,6 +2,18 @@
 #include <cassert>
 #include "fms_bootstrap.h"
 
+int scratch()
+{
+    int x = 1;
+    auto f = [&x]() { return x; };
+    assert(1 == f());
+    x = 2;
+    assert(2 == f());
+
+    return 0;
+}
+int scratch_ = scratch();
+
 template<class U, class C>
 int test_bootstrap()
 {

@@ -2,5 +2,13 @@
 
 Homework 8
 
-This homework invoves [bootstrapping](https://github.com/keithalewis/papers/blob/master/bootstrap.pdf) 
+This homework involves [bootstrapping](https://github.com/keithalewis/papers/blob/master/bootstrap.pdf) 
 piecewise constant forward curves.
+
+Write functions implementing cash deposits, forward rate agreements, and swaps.
+
+Write Excel add-ins for these.
+
+Create documentation.
+
+Make a spreadsheet.
