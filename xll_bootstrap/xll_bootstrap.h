@@ -9,6 +9,7 @@
 
 namespace xll {
 
+	// NVI interface to instrument
     template<class T = double, class C = double>
     struct instrument {
         virtual ~instrument()
@@ -31,6 +32,7 @@ namespace xll {
         virtual instrument& op_incr() = 0;
     };
 
+	// This class knows the actual instrument type.
     template<class I>
     class instrument_impl : public instrument<> {
         I i;

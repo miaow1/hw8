@@ -38,9 +38,10 @@ namespace fms::pwflat {
 	// Value of the pwflat forward curve at u given sequences for points determining the curve.
 	template<class T, class F>
 	inline auto value(const value_type<T>& u, T t, F f, const value_type<F>& _f = NaN<value_type<F>>)
+		-> decltype(*f)
 	{
 		if (u < 0) {
-			return NaN<value_type<F>>;
+			return std::numeric_limits<decltype(*f)>::quiet_NaN() ;
 		}
 
 		while (t and *t < u) {
@@ -80,7 +81,10 @@ namespace fms::pwflat {
 		F f;
 		_F _f;
 	public:
-		forward(T t, F f, const _F _f = NaN<_F>)
+		forward(const _F& _f = NaN<_F>)
+			: _f(_f)
+		{ }
+		forward(T t, F f, const _F& _f = NaN<_F>)
 			: t(t), f(f), _f(_f)
 		{ }
 

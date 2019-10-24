@@ -1,6 +1,12 @@
 // fms_bootstrap.t.cpp - Test bootstrap algorithm.
 #include <cassert>
 #include "fms_bootstrap.h"
+#include "fms_pwflat.h"
+
+using namespace fms::bootstrap;
+using namespace fms::pwflat;
+
+using fms::sequence::list;
 
 int scratch()
 {
@@ -14,9 +20,11 @@ int scratch()
 }
 int scratch_ = scratch();
 
-template<class U, class C>
-int test_bootstrap()
+int test_bootstrap_extend()
 {
+	auto t = list<double>{};
+	auto f = list<double>{};
+	//fms::pwflat::forward<list<double>, list<double>> f;
 	/*
 	C r = 0.01;
 	cd cd1(0.25, r);
@@ -30,7 +38,7 @@ int test_bootstrap()
 	*/
 	return 0;
 }
-int test_bootstrap_int_int = test_bootstrap<int,int>();
+int test_bootstrap_extend_ = test_bootstrap_extend();
 
 int main()
 {
