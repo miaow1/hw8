@@ -1,3 +1,6 @@
 [submodule "fms_sequence"]
 	path = fms_sequence
 	url = https://github.com/keithalewis/fms_sequence.git
+[submodule "xll12"]
+	path = xll12
+	url = https://github.com/keithalewis/xll12.git
