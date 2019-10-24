@@ -1,7 +1,7 @@
 // fms_pwflat_integral.t.cpp - Test pwflat integral.
 #include <cassert>
 #include "fms_pwflat.h"
-#include "fms_sequence_list.h"
+#include "../fms_sequence/fms_sequence_list.h"
 
 using namespace fms::pwflat;
 #if 0

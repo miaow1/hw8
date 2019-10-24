@@ -1,6 +1,6 @@
 // fms_pwflat.t.cpp - Test piecewise flat vector implmentation.
 #include <cassert>
-#include "fms_sequence_list.h"
+#include "../fms_sequence/fms_sequence_list.h"
 #include "fms_pwflat.h"
 
 using namespace fms::pwflat;

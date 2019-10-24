@@ -23,13 +23,20 @@
 */
 
 // Type of *S
+/*
 template<class S>
 using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
 
 template<class... S>
 using common_value_type = std::common_type_t<value_type<S>...>;
-
+*/
 namespace fms::pwflat {
+
+	template<class S>
+	using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
+
+	template<class... S>
+	using common_value_type = std::common_type_t<value_type<S>...>;
 
 	// Shorthand for Not a Number.
 	template<class X>
@@ -37,11 +44,11 @@ namespace fms::pwflat {
 
 	// Value of the pwflat forward curve at u given sequences for points determining the curve.
 	template<class T, class F>
-	inline auto value(const value_type<T>& u, T t, F f, const value_type<F>& _f = NaN<value_type<F>>)
-		-> decltype(*f)
+//	inline value_type<F> value(const value_type<T>& u, T t, F f, const value_type<F> _f = NaN<value_type<F>>)
+	inline double value(const double& u, T t, F f, const double _f = NaN<double>)
 	{
 		if (u < 0) {
-			return std::numeric_limits<decltype(*f)>::quiet_NaN() ;
+			return NaN<value_type<F>>;
 		}
 
 		while (t and *t < u) {
@@ -54,7 +61,8 @@ namespace fms::pwflat {
 
 	// Integral of the pwflat forward from 0 to u given sequences for points determining the curve.
 	template<class T, class F>
-	inline auto integral(const value_type<T>& u, T t, F f, const decltype(*f)& _f = NaN<decltype(*f)>)
+//	inline auto integral(const value_type<T>& u, T t, F f, const decltype(*f)& _f = NaN<decltype(*f)>)
+	inline double integral(const double& u, T t, F f, const double& _f = NaN<double>)
 	{
 		common_value_type<T,F> I = 0;
 		value_type<T> t_ = 0;
