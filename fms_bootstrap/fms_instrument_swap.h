@@ -8,7 +8,7 @@
 
 namespace fms::instrument {
 	
-	// auto make_time(....)
-	// auto make_cash(....)
+	// auto make_time(....) -> (0, 1/freq,  ..., maturity)
+	// auto make_cash(....) -> (-1, c/freq, ..., 1 + c/freq)
 
 }

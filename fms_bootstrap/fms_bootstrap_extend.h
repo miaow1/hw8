@@ -53,7 +53,7 @@ namespace fms::bootstrap {
 		auto prod = c * Du;
 		auto p0 = prod;
 		p0 = p0;
-		auto pv_ = sum(c);
+		auto pv_ = sum(c * apply(D, u_));
 		pv_ = pv_;
 #if 0
 
