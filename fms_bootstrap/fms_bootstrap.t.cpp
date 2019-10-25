@@ -30,7 +30,7 @@ int test_bootstrap_extend()
 //	auto cd0 = fms::instrument::sequence(list({ 0., -1. }), list({ 0.25, 1.01 }));
 	auto u0 = list<double>({ 0., 0.25 });
 	auto c0 = list<double>({ -1, 1.01 });
-	auto p = extend(F, 0., 0., u0, c0);
+//	auto p = extend(F, 0., 0., u0, c0);
 
 	/*
 	C r = 0.01;

@@ -162,7 +162,9 @@
     <ClInclude Include="fms_bootstrap_extend.h" />
     <ClInclude Include="fms_instrument.h" />
     <ClInclude Include="fms_instrument_cd.h" />
+    <ClInclude Include="fms_instrument_fra.h" />
     <ClInclude Include="fms_instrument_sequence.h" />
+    <ClInclude Include="fms_instrument_swap.h" />
     <ClInclude Include="fms_pwflat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

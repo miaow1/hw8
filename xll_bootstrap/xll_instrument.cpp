@@ -79,3 +79,32 @@ _FP12* WINAPI xll_instrument_cash_flows(HANDLEX inst)
 
 	return result.get();
 }
+
+AddIn xai_instrument_cd(
+	Function(XLL_HANDLE, L"?xll_instrument_cd", CATEGORY L".CASH_DEPOSIT")
+	.Arg(XLL_DOUBLE, L"tenor", L"is the time in years at which the cash deposit matures.")
+	.Arg(XLL_DOUBLE, L"rate", L"is the simple compounding rate for the cash deposit.")
+	.Uncalced()
+	.FunctionHelp(L"Return a handle to a cash deposit instrument.")
+	.Documentation(L"doc...")
+);
+HANDLEX WINAPI xll_instrument_cd(double tenor, double rate)
+{
+#pragma XLLEXPORT
+	handlex result;
+
+	try {
+		auto cd = fms::instrument::cash_deposit(tenor, rate);
+		handle<xll::instrument<>> cd_(new instrument_impl(cd));
+
+		result = cd_.get();
+	}
+	catch (const std::exception & ex) {
+		XLL_ERROR(ex.what());
+
+		return 0; // #NUM!
+	}
+
+	return result;
+
+}
