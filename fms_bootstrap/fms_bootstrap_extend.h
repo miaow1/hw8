@@ -38,24 +38,18 @@ namespace fms::bootstrap {
         using fms::sequence::filter;
         using fms::sequence::sum;
 
-		double x;
-		if (p == p)
-			x = 1;
-
 		// set extrapolated value to NaN
 		f.extrapolate();
 
 		// discount function
-		auto D = [&f](const T& t) { return f.discount(t); };
+		auto D = [&f](const double& x) { return f.discount(x); };
+
 		// Cash flow times up to t.
 		auto u_ = filter([t](auto _u) { return _u <= t; }, u);	
-		auto Du = apply(D, u_);
-		auto prod = c * Du;
-		auto p0 = prod;
-		p0 = p0;
-		auto pv_ = sum(c * apply(D, u_));
-		pv_ = pv_;
-#if 0
+		//size_t n;
+		//n = length(u_);
+		auto D_ = apply(D, u_);
+		auto pv_ = sum(c * D_);
 
 		auto n_ = length(u_);
 		auto _u = skip(n_, u);
@@ -77,23 +71,22 @@ namespace fms::bootstrap {
 			return std::pair(u1, extend2(c0, u0, c1, u1));
 		}
 		
-		auto _pv = [_u, _c, &f](C _f) { f.extrapolate(_f);  return sum(_c, apply(D, _u)); };
+		auto _pv = [_u, _c, &f, &D](double _f) { f.extrapolate(_f);  return sum(_c, apply(D, _u)); };
 
-		C f0 = 0.01, f1 = 0.02; // initial guesses for secant
+		double f0 = 0.01, f1 = 0.02; // initial guesses for secant
 		auto _pv0 = _pv(f0);
 		auto _pv1 = _pv(f1);
 		
 		// Find root using secant method.
 		while (fabs(-p + pv_ + _pv1) >= 1e-8) {
-			auto f2 = (f0 * _pv1 - f1*_pv0) / (_pv1 - _pv0);
+			double f2 = (f0 * _pv1 - f1*_pv0) / (_pv1 - _pv0);
 			_pv0 = _pv1;
 			_pv1 = _pv(f2);
 			f0 = f1;
 			f1 = f2;
 		}
-#endif	
-		return std::pair<double,double>(0, 0);
 
+		return std::pair<double,double>(*back(_u), f1);
 	}
 
 }

@@ -72,6 +72,10 @@ namespace fms::pwflat {
 			return NaN<double>; //!!! value_type<F >> ;
 		}
 
+		if (!t and u + 1 == 1) {
+			return 0;
+		}
+
 		while (t and *t < u) {
 			I += (*f) * (*t - t_);
 			t_ = *t;

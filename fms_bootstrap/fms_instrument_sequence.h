@@ -14,6 +14,14 @@ namespace fms::instrument {
 		sequence(const U& u, const C& c)
 			: u(u), c(c)
 		{ }
+		const U& time() const
+		{
+			return u;
+		}
+		const C& cash() const
+		{
+			return c;
+		}
 		const auto operator<=>(const sequence&) const = default;
 		operator bool() const
 		{
