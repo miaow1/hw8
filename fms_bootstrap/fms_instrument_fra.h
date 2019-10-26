@@ -3,3 +3,5 @@
 // and 1 + forward*tenor at the expriation date = effective + tenor.
 // The argument order for the constructor is (effective, tenor, forward)
 #pragma once
+
+//!!! Implement the class forward_rate_agreement in namespace fms::instrument.

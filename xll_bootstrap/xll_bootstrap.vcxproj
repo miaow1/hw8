@@ -152,10 +152,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xll_bootstrap.h" />
+    <ClInclude Include="xll_instrument.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll_bootstrap.cpp" />
     <ClCompile Include="xll_instrument.cpp" />
+    <ClCompile Include="xll_pwflat.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

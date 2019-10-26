@@ -1,7 +1,9 @@
 // xll_instrument.cpp - Excel add-in for fixed income instruments.
 #include "../fms_sequence/fms_sequence_list.h"
 #include "../fms_bootstrap/fms_instrument.h"
+#include "../xll12/xll/shfb/entities.h"
 #include "xll_bootstrap.h"
+#include "xll_instrument.h"
 
 #ifdef CATEGORY
 #undef CATEGORY
@@ -11,11 +13,13 @@
 using namespace fms;
 using namespace xll;
 
-// sequence from FP reference
-auto list(const _FP12& a)
-{
-	return sequence::list(size(a), a.array);
-}
+AddIn xai_instrument(
+	Document(CATEGORY)
+	.Category(CATEGORY)
+	.Documentation(
+		L"Functions for fixed income instruments."
+	)
+);
 
 AddIn xai_instrument_sequence(
 	Function(XLL_HANDLE, L"?xll_instrument_sequence", CATEGORY L".SEQUENCE")
@@ -24,7 +28,10 @@ AddIn xai_instrument_sequence(
 	.Uncalced()
 	.Category(CATEGORY)
 	.FunctionHelp(L"Return a handle to an instrument sequence.")
-	.Documentation(L"doc...")
+	.Documentation(
+		L"Specify arbitratry times in years and cash flow amounts for an instrument. "
+		L"The times must be increasing and non-negative. "
+	)
 );
 HANDLEX WINAPI xll_instrument_sequence(const _FP12* pu, const _FP12* pc)
 {
@@ -53,7 +60,9 @@ AddIn xai_instrument_cash_flows(
 	.Arg(XLL_HANDLE, L"instrument", L"is a handle to an instrument.")
 	.Category(CATEGORY)
 	.FunctionHelp(L"Return a two column array of cash flow time and amount.")
-	.Documentation(L"doc...")
+	.Documentation(
+		L"The first column is the cash flow time and the second is the corresponding amount. "
+	)
 );
 _FP12* WINAPI xll_instrument_cash_flows(HANDLEX inst)
 {
@@ -85,8 +94,15 @@ AddIn xai_instrument_cd(
 	.Arg(XLL_DOUBLE, L"tenor", L"is the time in years at which the cash deposit matures.")
 	.Arg(XLL_DOUBLE, L"rate", L"is the simple compounding rate for the cash deposit.")
 	.Uncalced()
+	.Category(CATEGORY)
 	.FunctionHelp(L"Return a handle to a cash deposit instrument.")
-	.Documentation(L"doc...")
+	.Documentation(
+		L"A cash deposit has two cash flows. The first is at time 0 and is always -1. "
+		L"This corresponds to having initial price 1. "
+		L"The second occurs at " C_(L"tenor") L" and is equal to  1 + r" delta_
+		L" where r is the simple compounding " C_(L"rate") L" and " delta_
+		L" is the " C_(L"tenor") L" in years. "
+	)
 );
 HANDLEX WINAPI xll_instrument_cd(double tenor, double rate)
 {
@@ -108,3 +124,7 @@ HANDLEX WINAPI xll_instrument_cd(double tenor, double rate)
 	return result;
 
 }
+
+//!!! Implement INSTRUMENT.FORWARD_RATE_AGREEMENT(effective, tenor, forward)
+
+//!!! Implement INSTRUMENT.INTEREST_RATE_SWAP(maturity, frequency, coupon)

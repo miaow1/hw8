@@ -4,8 +4,9 @@
 using namespace xll;
 
 AddIn xai_bootstrap(
-    Document(CATEGORY)
+    Document(L"xll_bootstrap")
+	.Category(L"bootstrap")
     .Documentation(
-        L""
+        L"Excel add-in for bootstrapping piecewise constant forward curves."
     )
 );

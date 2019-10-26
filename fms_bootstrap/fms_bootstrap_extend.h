@@ -45,9 +45,9 @@ namespace fms::bootstrap {
 		auto D = [&f](const double& x) { return f.discount(x); };
 
 		// Cash flow times up to t.
-		auto u_ = filter([t](auto _u) { return _u <= t; }, u);	
-		//size_t n;
-		//n = length(u_);
+		auto u_ = filter([t](auto _u) { return _u < t; }, u);	
+		size_t n;
+		n = length(u_);
 		auto D_ = apply(D, u_);
 		auto pv_ = sum(c * D_);
 

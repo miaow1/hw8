@@ -8,7 +8,10 @@
 
 namespace fms::instrument {
 	
+	//!!! Implement helper functions.
 	// auto make_time(....) -> (0, 1/freq,  ..., maturity)
 	// auto make_cash(....) -> (-1, c/freq, ..., 1 + c/freq)
+
+	//!!! Implement the class interest_rate_swap in namespace fms::instrument.
 
 }

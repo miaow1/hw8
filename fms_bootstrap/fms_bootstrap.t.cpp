@@ -25,7 +25,8 @@ int test_bootstrap_extend()
 	auto t = list<double>{};
 	auto f = list<double>{};
 	forward F(t,f);
-	//double f0;
+	double _t;
+	double _f;
 	{
 	//	auto cd0 = fms::instrument::sequence(list({ 0., -1. }), list({ 0.25, 1.01 }));
 		auto u0 = list<double>({ 0., 0.25 });
@@ -34,15 +35,27 @@ int test_bootstrap_extend()
 		assert(u == 0.25);
 		auto p = 1.01 * exp(-r * 0.25);
 		assert(p == 1);
+
+		_t = u;
+		_f = r;
 	}
 	{
-		auto cd0 = fms::instrument::sequence(list({ 0., -1. }), list({ 0.25, 1.01 }));
+		auto cd0 = fms::instrument::sequence(list({ 0., 0.25 }), list({ -1., 1.01 }));
 		list<double> u0 = cd0.time();
 		list<double> c0 = cd0.cash();
 		auto [u, r] = extend(F, 0., 0., u0, c0);
 		assert(u == 0.25);
 		auto p = 1.01 * exp(-r * 0.25);
 		assert(p == 1);
+	}
+	t.push_back(_t);
+	f.push_back(_f);
+	{
+		auto cd1 = fms::instrument::sequence(list({ 0., 0.5 }), list({ -1., 1.05 }));
+		auto [u, r] = extend(F, _t, 0., cd1.time(), cd1.cash());
+		assert(u == 0.5);
+		//auto p = 1.01 * exp(-r * 0.25);
+		//assert(p == 1);
 	}
 
 	/*
