@@ -15,3 +15,5 @@ Create documentation by starting the `xll_bootstrap.xll` add-in and running (Alt
 Move `xll_bootstrap.chm` to the `hw8` folder and add that to git.
 
 Add calls for the add-ins you wrote to the `hw8.xlsx` spreadsheet in the `hw8` folder.
+
+Implement `PWFLAT.FORWARD.SPOT` and `PWFLAT.FORWARD.DISCOUNT` in `xll_pwflat.cpp` based on `PWFLAT.FORWARD.VALUE`
